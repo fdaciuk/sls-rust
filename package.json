@@ -1,0 +1,31 @@
+{
+  "name": "sls-rust",
+  "version": "0.0.1",
+  "description": "Serverless framework plugin for Rust applications",
+  "main": "sls-rust.js",
+  "author": "Fernando Daciuk <@fdaciuk>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fdaciuk/sls-rust.git"
+  },
+  "keywords": [
+    "rust",
+    "rustlang",
+    "aws",
+    "serverless",
+    "lambda"
+  ],
+  "bugs": {
+    "url": "https://github.com/fdaciuk/sls-rust/issues"
+  },
+  "homepage": "https://github.com/fdaciuk/sls-rust#readme",
+  "files": [
+    "sls-rust.js",
+    "package.json",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "serverless": "^3"
+  }
+}
