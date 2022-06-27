@@ -69,7 +69,7 @@ class SlsRust {
   async runZipArtifact ({ path, projectName }) {
     try {
       await this.runCommand({ command: `mv ${projectName} bootstrap`, cwd: path })
-      await this.runCommand({ command: `zip bootstrap.zip bootstrap`, cwd: path })
+      await this.runCommand({ command: `zip ${projectName}.zip bootstrap`, cwd: path })
     } catch (error) {
       throw new Error(`Error trying to zip artefact in ${projectName}: ${error}`)
     }
@@ -83,7 +83,7 @@ class SlsRust {
     await this.runBuildCommand({ path, projectName })
     await this.runZipArtifact({ path: targetPath, projectName })
 
-    const artifactPath = join(targetPath, 'bootstrap.zip')
+    const artifactPath = join(targetPath, `${projectName}.zip`)
     fn.package = fn.package || {}
     fn.package.artifact = artifactPath
     this.log(`Finished building ${projectName}!`)
