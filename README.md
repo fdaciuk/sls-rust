@@ -57,8 +57,8 @@ package:
 
 functions:
   test:
-    # handler value syntax is `{rust_project_path}.{cargo_package_name}`
-    handler: rust_project_path.cargo_package_name
+    # handler value syntax is `{rust_project_path}.{project_binary_name}`
+    handler: rust_project_path.project_binary_name
     # you must use tags.rust = true to make this plugin works:
     tags:
       rust: true
