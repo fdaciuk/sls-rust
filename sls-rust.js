@@ -67,9 +67,19 @@ class SlsRust {
   }
 
   async runZipArtifact ({ path, projectName }) {
+    const projectDir = `${projectName}-dir`
+    const projectFullPath = join(projectDir, projectName)
+    const bootstrapFullPath = join(projectDir, 'bootstrap')
+
     try {
-      await this.runCommand({ command: `mv ${projectName} bootstrap`, cwd: path })
-      await this.runCommand({ command: `zip ${projectName}.zip bootstrap`, cwd: path })
+      await this.runCommand({ command: `rm ${projectName}.zip`, cwd: path })
+      await this.runCommand({ command: `rm bootstrap`, cwd: path })
+      await this.runCommand({ command: `rm -rf ${projectDir}`, cwd: path })
+      await this.runCommand({ command: `mkdir ${projectDir}`, cwd: path })
+      await this.runCommand({ command: `mv ${projectName} ${projectDir}/`, cwd: path })
+      await this.runCommand({ command: `mv ${projectFullPath} ${bootstrapFullPath}`, cwd: path })
+      await this.runCommand({ command: `zip ${projectFullPath}.zip ${bootstrapFullPath}`, cwd: path })
+      await this.runCommand({ command: `mv ${projectFullPath}.zip .`, cwd: path })
     } catch (error) {
       throw new Error(`Error trying to zip artefact in ${projectName}: ${error}`)
     }
