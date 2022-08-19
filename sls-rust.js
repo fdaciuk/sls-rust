@@ -78,7 +78,7 @@ class SlsRust {
       await this.runCommand({ command: `mkdir ${projectDir}`, cwd: path })
       await this.runCommand({ command: `mv ${projectName} ${projectDir}/`, cwd: path })
       await this.runCommand({ command: `mv ${projectFullPath} ${bootstrapFullPath}`, cwd: path })
-      await this.runCommand({ command: `zip ${projectFullPath}.zip ${bootstrapFullPath}`, cwd: path })
+      await this.runCommand({ command: `zip -j ${projectFullPath}.zip ${bootstrapFullPath}`, cwd: path })
       await this.runCommand({ command: `mv ${projectFullPath}.zip .`, cwd: path })
     } catch (error) {
       throw new Error(`Error trying to zip artefact in ${projectName}: ${error}`)
