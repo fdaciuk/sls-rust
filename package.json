@@ -1,6 +1,6 @@
 {
   "name": "sls-rust",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Serverless framework plugin for Rust applications",
   "main": "sls-rust.js",
   "author": "Fernando Daciuk <@fdaciuk>",
