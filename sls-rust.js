@@ -96,6 +96,8 @@ class SlsRust {
     const artifactPath = join(targetPath, `${projectName}.zip`)
     fn.package = fn.package || {}
     fn.package.artifact = artifactPath
+    fn.handler = 'bootstrap'
+    fn.runtime = 'provided.al2'
     this.log(`Finished building ${projectName}!`)
   }
 
