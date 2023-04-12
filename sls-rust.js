@@ -32,6 +32,9 @@ class SlsRust {
       throw new SlsRustPluginNoRustFnsError()
     }
 
+    this.log(`Building Rust funcs...`)
+    await this.runBuildCommand()
+
     const buildPromises = rustFns.map(fnName => {
       const fn = this.serverless.service.getFunction(fnName)
       return this.build(fn)
@@ -55,14 +58,14 @@ class SlsRust {
 
   }
 
-  async runBuildCommand ({ path, projectName }) {
+  async runBuildCommand () {
     try {
       await this.runCommand({ 
         command: `cargo build --release --target ${this.targetRuntime}`, 
-        cwd: path,
+        cwd: '.',
       })
     } catch (error) {
-      throw new Error(`Error building project ${projectName}: ${error}`)
+      throw new Error(`Error building rust functions: ${error}`)
     }
   }
 
@@ -86,11 +89,8 @@ class SlsRust {
   }
 
   async build (fn) {
-    const { projectPath, projectName } = this.getProjectPathAndName(fn)
-    this.log(`Building Rust ${fn.handler} func...`)
-    const path = join('.', projectPath)
-    const targetPath = join(path, 'target', this.targetRuntime, 'release')
-    await this.runBuildCommand({ path, projectName })
+    const projectName = fn.handler
+    const targetPath = join('.', 'target', this.targetRuntime, 'release')
     await this.runZipArtifact({ path: targetPath, projectName })
 
     const artifactPath = join(targetPath, `${projectName}.zip`)
@@ -99,15 +99,6 @@ class SlsRust {
     fn.handler = 'bootstrap'
     fn.runtime = 'provided.al2'
     this.log(`Finished building ${projectName}!`)
-  }
-
-  getProjectPathAndName (fn) {
-    const [projectPath, projectName] = fn.handler.split('.')
-    if (!projectPath || !projectName) {
-      throw new SlsRustPluginWrongHandlerError()
-    }
-
-    return { projectPath, projectName }
   }
 }
 
@@ -132,7 +123,6 @@ class SlsRustPluginNoRustFnsError extends SlsRustPluginMainError {
 functions:
   rust:
     handler: your_rust_project_name
-    runtime: provided.al2
     tags:
       rust: true
       `
