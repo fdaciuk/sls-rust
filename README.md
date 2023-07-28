@@ -6,12 +6,14 @@
    A ⚡ <a href="https://www.serverless.com/framework/docs/">Serverless framework</a> ⚡ plugin for <a href="https://www.rust-lang.org/">Rust</a> applications
 </p>
 
-> Note: this plugin was inspired on [softprops/serverless-rust](https://github.com/softprops/serverless-rust). 
-> Since the `serverless-rust` plugin is not activelly mantained, I created this 
-> one to work with minimal effort as possible: without docker, and probably only 
-> run on Linux (not tested on other OS). Great for CI environments.
+> Note: this plugin was inspired on [softprops/serverless-rust](https://github.com/softprops/serverless-rust).
+> Since the `serverless-rust` plugin is not actively mantained, I created this
+> one to work with minimal effort as possible: without docker, and probably only
+> run on Linux and macOS (not tested on other OS). Great for CI environments.
 
 ## 📦 Install
+
+Install [Zig](https://ziglang.org/) and [cargo-zigbuild](https://github.com/rust-cross/cargo-zigbuild) because this plugin uses Zig as a linker for easier cross-compiling.
 
 You should put the `serverless.yml` file outside the Rust project directory:
 
@@ -112,6 +114,6 @@ $ npx serverless invoke -f hello -d '{"hello":"world"}'
 $ npx serverless logs -f hello
 ```
 
-## License 
+## License
 
 MIT

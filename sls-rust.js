@@ -1,6 +1,7 @@
 'use strict'
 
 const { spawn } = require('node:child_process')
+const { existsSync, mkdirSync } = require('node:fs')
 const { join } = require('node:path')
 
 class SlsRust {
@@ -55,14 +56,29 @@ class SlsRust {
 
   }
 
-  async runBuildCommand ({ path, projectName }) {
+  createTargetPath(targetPath) {
+    if (!existsSync(targetPath)) {
+      mkdirSync(targetPath, { recursive: true });
+    }
+  }
+
+  async runBuildCommand ({ projectName }) {
     try {
-      await this.runCommand({ 
-        command: `cargo build --release --target ${this.targetRuntime}`, 
-        cwd: path,
+      await this.runCommand({
+        command: `cargo zigbuild --release --target ${this.targetRuntime}`,
       })
     } catch (error) {
       throw new Error(`Error building project ${projectName}: ${error}`)
+    }
+  }
+
+  async moveBinaryToTargetPath ({ targetPath, projectName }) {
+    try {
+      await this.runCommand({
+        command: `mv target/${this.targetRuntime}/release/${projectName} ${targetPath}`,
+      })
+    } catch (error) {
+      throw new Error(`Error moving binary to target path ${targetPath}: ${error}`)
     }
   }
 
@@ -81,7 +97,7 @@ class SlsRust {
       await this.runCommand({ command: `zip -j ${projectFullPath}.zip ${bootstrapFullPath}`, cwd: path })
       await this.runCommand({ command: `mv ${projectFullPath}.zip .`, cwd: path })
     } catch (error) {
-      throw new Error(`Error trying to zip artefact in ${projectName}: ${error}`)
+      throw new Error(`Error trying to zip artifact in ${projectName}: ${error}`)
     }
   }
 
@@ -89,8 +105,12 @@ class SlsRust {
     const { projectPath, projectName } = this.getProjectPathAndName(fn)
     this.log(`Building Rust ${fn.handler} func...`)
     const path = join('.', projectPath)
-    const targetPath = join(path, 'target', this.targetRuntime, 'release')
-    await this.runBuildCommand({ path, projectName })
+
+    const targetPath = join('target', path, this.targetRuntime, 'release')
+    this.createTargetPath(targetPath)
+
+    await this.runBuildCommand({ projectName })
+    await this.moveBinaryToTargetPath({ targetPath, projectName })
     await this.runZipArtifact({ path: targetPath, projectName })
 
     const artifactPath = join(targetPath, `${projectName}.zip`)
