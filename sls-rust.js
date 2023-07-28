@@ -97,7 +97,7 @@ class SlsRust {
       await this.runCommand({ command: `zip -j ${projectFullPath}.zip ${bootstrapFullPath}`, cwd: path })
       await this.runCommand({ command: `mv ${projectFullPath}.zip .`, cwd: path })
     } catch (error) {
-      throw new Error(`Error trying to zip artefact in ${projectName}: ${error}`)
+      throw new Error(`Error trying to zip artifact in ${projectName}: ${error}`)
     }
   }
 
